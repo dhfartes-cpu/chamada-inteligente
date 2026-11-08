@@ -29,17 +29,20 @@ export default function handler(req, res) {
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     const horarioAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    // Chave única combinando Aluno, Turma e Disciplina para separar as aulas
-    const chaveUnica = `${alunoId}-${turma}-${disciplina}`;
-    const indexExistente = listaPresencas.findIndex(p => `${p.alunoId}-${p.turma}-${p.disciplina}` === chaveUnica);
+    const discAtual = disciplina || 'Artes';
+    const perAtual = periodo || '1º Período';
+
+    // Chave única exata para a aula (Aluno + Turma + Disciplina + Período)
+    const chaveUnica = `${alunoId}-${turma}-${discAtual}-${perAtual}`;
+    const indexExistente = listaPresencas.findIndex(p => `${p.alunoId}-${p.turma}-${p.disciplina}-${p.periodo}` === chaveUnica);
 
     const novoRegistro = {
       alunoId: alunoId || Date.now().toString(),
       nome,
       turma,
       avatarUrl: avatarUrl || '',
-      disciplina: disciplina || 'Artes',
-      periodo: periodo || '1º Período',
+      disciplina: discAtual,
+      periodo: perAtual,
       data: dataAtual,
       horario: horarioAtual
     };
@@ -50,19 +53,13 @@ export default function handler(req, res) {
       listaPresencas.push(novoRegistro);
     }
 
-    res.status(200).json({ mensagem: 'Presença atualizada!', registro: novoRegistro });
+    res.status(200).json({ mensagem: 'Presença sincronizada com sucesso!', registro: novoRegistro });
     return;
   }
 
-  // DELETE para remover um aluno específico ou limpar tudo
   if (req.method === 'DELETE') {
-    const { alunoId, turma, disciplina } = req.query;
-    if (alunoId && turma && disciplina) {
-      listaPresencas = listaPresencas.filter(p => !(p.alunoId === alunoId && p.turma === turma && p.disciplina === disciplina));
-      return res.status(200).json({ mensagem: 'Aluno removido da presença.' });
-    }
     listaPresencas = [];
-    res.status(200).json({ mensagem: 'Painel limpo!' });
+    res.status(200).json({ mensagem: 'Histórico limpo com sucesso!' });
     return;
   }
 
