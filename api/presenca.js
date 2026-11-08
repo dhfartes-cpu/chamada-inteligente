@@ -26,10 +26,8 @@ export default function handler(req, res) {
       return res.status(400).json({ erro: 'Nome e Turma são obrigatórios!' });
     }
 
-    // Horário local do Brasil ajustado perfeitamente (-3h)
     const agora = new Date();
-    agora.setHours(agora.getHours()); 
-    const dataAtual = agora.toLocaleDateString('pt-BR');
+    const dataAtual = agora.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     const horarioAtual = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
 
     const discAtual = disciplina || 'Artes';
@@ -37,8 +35,16 @@ export default function handler(req, res) {
     const perAtual = periodo || '1 Período';
     const statusAtual = status || 'PRESENTE';
 
-    const chaveUnica = `${alunoId}-${turma}-${discAtual}`;
-    const indexExistente = listaPresencas.findIndex(p => `${p.alunoId}-${p.turma}-${p.disciplina}` === chaveUnica);
+    // REGRA DE SOBREPOSIÇÃO POR TURMA:
+    // Se a chamada enviada for para uma turma que já existe com OUTRA disciplina,
+    // limpamos a chamada antiga dessa turma para ficar APENAS a aula atual.
+    const chamadaExistenteDaTurma = listaPresencas.find(p => p.turma === turma);
+    if (chamadaExistenteDaTurma && chamadaExistenteDaTurma.disciplina !== discAtual) {
+      listaPresencas = listaPresencas.filter(p => p.turma !== turma);
+    }
+
+    const chaveUnica = `${alunoId}-${turma}`;
+    const indexExistente = listaPresencas.findIndex(p => `${p.alunoId}-${p.turma}` === chaveUnica);
 
     const novoRegistro = {
       alunoId: alunoId || Date.now().toString(),
