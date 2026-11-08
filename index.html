@@ -177,7 +177,7 @@
 
         .grid-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 12px;
         }
 
@@ -199,17 +199,17 @@
             border-color: var(--cor-neon, #38bdf8);
         }
         .card-aluno img {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--cor-neon, #38bdf8);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             background: #1e293b;
         }
         .card-aluno h4 {
             font-size: 12px;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             color: #fff;
             width: 100%;
             white-space: nowrap;
@@ -225,12 +225,16 @@
             border-radius: 4px;
             margin-top: 2px;
         }
-        .card-aluno .periodos-info {
+        .card-aluno .periodos-detalhe {
             font-size: 10px;
-            color: #38bdf8;
-            margin-top: 2px;
+            margin-top: 4px;
+            padding: 3px 6px;
+            border-radius: 4px;
             font-weight: bold;
+            width: 100%;
         }
+        .status-parcial { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4); }
+        .status-completo { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
 
         footer {
             margin-top: 12px;
@@ -276,7 +280,6 @@
     </footer>
 
     <script>
-        // Lista oficial e completa de alunos da Turma 91 para a Eletiva
         const alunosDaEletiva = [
             "Ágata Gonçalves", "Alice Vaz", "Arthur Becker", "Cynara Mirella", 
             "Gabriel do Prado", "Henrique Cardoso", "Isabelle Correa", "Isabelle Krystine", 
@@ -358,23 +361,35 @@
                     secao.style.setProperty('--cor-neon', corAtual);
 
                     let cardsHtml = '';
-                    presentes.forEach(aluno => {
+                    todosAlunosDaAula.forEach(aluno => {
                         const fotoAvatar = (aluno.avatarUrl && aluno.avatarUrl.trim() !== "") 
                             ? aluno.avatarUrl 
                             : gerarAvatarPadrao(aluno.nome);
+
+                        let badgeStatusHtml = '';
+                        if (aluno.status === "PRESENTE") {
+                            // Verifica se há discriminação de períodos (ex: veio só no 1º ou só no 2º)
+                            if (aluno.detalhePeriodos) {
+                                badgeStatusHtml = `<div class="periodos-detalhe status-parcial">⚠️ ${aluno.detalhePeriodos}</div>`;
+                            } else {
+                                badgeStatusHtml = `<div class="periodos-detalhe status-completo">✅ Presente (${bloco.periodo})</div>`;
+                            }
+                        } else {
+                            badgeStatusHtml = `<div class="periodos-detalhe" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">❌ Falta Total</div>`;
+                        }
 
                         cardsHtml += `
                             <div class="card-aluno">
                                 <img src="${fotoAvatar}" alt="${aluno.nome}" onerror="this.src='${gerarAvatarPadrao(aluno.nome)}'">
                                 <h4 title="${aluno.nome}">${aluno.nome}</h4>
                                 <div class="detalhes">Turma ${bloco.turma}</div>
-                                <div class="periodos-info">✓ ${bloco.periodo}</div>
+                                ${badgeStatusHtml}
                             </div>
                         `;
                     });
 
-                    if (presentes.length === 0) {
-                        cardsHtml = '<p style="color: #64748b; font-size: 13px; grid-column: 1/-1;">Nenhum aluno presente registrado nesta chamada.</p>';
+                    if (todosAlunosDaAula.length === 0) {
+                        cardsHtml = '<p style="color: #64748b; font-size: 13px; grid-column: 1/-1;">Nenhum aluno registrado nesta chamada.</p>';
                     }
 
                     secao.innerHTML = `
@@ -384,7 +399,7 @@
                                 <span style="font-size: 13px; color: #94a3b8; font-weight: normal; margin-left: 10px;">(Prof. ${bloco.professor})</span>
                             </h3>
                             <div class="badges-status">
-                                <span class="badge-presente">✅ ${presentes.length} Presentes</span>
+                                <span class="badge-presente">✅ ${presentes.length} Alunos com Presença</span>
                                 <span class="badge-falta">❌ ${faltantes.length} Faltas</span>
                             </div>
                             <div class="meta-aula">
