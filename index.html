@@ -38,212 +38,103 @@
         }
         .bloco-professores strong { color: #38bdf8; font-size: 14px; }
 
-        .escola-centro {
-            text-align: center;
-        }
+        .escola-centro { text-align: center; }
         .escola-centro h1 { 
-            font-size: 26px; 
-            font-weight: 900; 
-            color: #fff; 
+            font-size: 26px; font-weight: 900; color: #fff; 
             text-shadow: 0 0 15px rgba(56, 189, 248, 0.6); 
             letter-spacing: 0.5px;
         }
         .escola-centro h3 {
-            font-size: 15px;
-            color: #38bdf8;
-            margin-top: 4px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 15px; color: #38bdf8; margin-top: 4px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .bloco-eletiva {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 10px;
-            padding: 10px 15px;
-            font-size: 12px;
-            color: #cbd5e1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            border-radius: 10px; padding: 10px 15px; font-size: 12px;
+            color: #cbd5e1; display: flex; flex-direction: column; justify-content: center;
         }
         .bloco-eletiva strong { color: #38bdf8; display: block; margin-bottom: 4px; font-size: 13px; }
         
         .lista-alunos-topo {
-            font-size: 11px;
-            color: #e2e8f0;
-            line-height: 1.4;
-            max-height: 60px;
-            overflow-y: auto;
-            padding-right: 4px;
-            word-break: break-word;
+            font-size: 11px; color: #e2e8f0; line-height: 1.4;
+            max-height: 60px; overflow-y: auto; padding-right: 4px; word-break: break-word;
         }
         .lista-alunos-topo::-webkit-scrollbar { width: 4px; }
         .lista-alunos-topo::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.5); border-radius: 4px; }
 
         .painel-container {
-            background: #0f172a;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-            overflow: hidden;
-            position: relative;
+            background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px; padding: 20px; margin-top: 15px; flex-grow: 1;
+            display: flex; flex-direction: column; box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            overflow: hidden; position: relative;
         }
 
-        .barra-acoes {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-            flex-shrink: 0;
-        }
+        .barra-acoes { display: flex; justify-content: flex-end; margin-bottom: 10px; flex-shrink: 0; }
         .btn-reset {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
+            background: rgba(239, 68, 68, 0.15); color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4); padding: 6px 14px;
+            border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-reset:hover {
-            background: rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-        }
+        .btn-reset:hover { background: rgba(239, 68, 68, 0.3); box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
 
         #container-aulas {
-            overflow-y: auto;
-            max-height: calc(100vh - 210px);
-            padding-right: 6px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+            overflow-y: auto; max-height: calc(100vh - 210px);
+            padding-right: 6px; display: flex; flex-direction: column; gap: 18px;
         }
         #container-aulas::-webkit-scrollbar { width: 6px; }
         #container-aulas::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 4px; }
 
         .secao-aula {
-            background: rgba(19, 28, 49, 0.7);
-            border-radius: 14px;
-            padding: 16px 20px;
+            background: rgba(19, 28, 49, 0.7); border-radius: 14px; padding: 16px 20px;
             border-left: 6px solid var(--cor-neon, #38bdf8);
-            border-top: 1px solid rgba(56, 189, 248, 0.2);
-            border-right: 1px solid rgba(56, 189, 248, 0.2);
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(56, 189, 248, 0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .cabecalho-secao {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-            gap: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px;
+            margin-bottom: 14px; flex-wrap: wrap; gap: 10px;
         }
         .cabecalho-secao h3 {
-            font-size: 18px;
-            color: var(--cor-neon, #38bdf8);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
+            font-size: 18px; color: var(--cor-neon, #38bdf8);
+            display: flex; align-items: center; gap: 10px; font-weight: 800;
         }
         .meta-aula {
-            font-size: 13px;
-            color: #cbd5e1;
-            background: rgba(15, 23, 42, 0.9);
-            padding: 6px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-weight: 600;
+            font-size: 13px; color: #cbd5e1; background: rgba(15, 23, 42, 0.9);
+            padding: 6px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); font-weight: 600;
         }
-        .badges-status {
-            display: flex;
-            gap: 10px;
-            font-size: 13px;
-            font-weight: bold;
-        }
+        .badges-status { display: flex; gap: 10px; font-size: 13px; font-weight: bold; }
         .badge-presente { background: rgba(34, 197, 94, 0.25); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.5); padding: 4px 12px; border-radius: 20px; }
         .badge-falta { background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); padding: 4px 12px; border-radius: 20px; }
 
         .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px;
         }
-
         .card-aluno {
             background: linear-gradient(145deg, #131c31, #0f172a);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px 8px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
+            padding: 10px 8px; text-align: center; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-        .card-aluno:hover {
-            transform: translateY(-2px);
-            border-color: var(--cor-neon, #38bdf8);
         }
         .card-aluno img {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--cor-neon, #38bdf8);
-            margin-bottom: 5px;
-            background: #1e293b;
+            width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--cor-neon, #38bdf8); margin-bottom: 4px; background: #1e293b;
         }
         .card-aluno h4 {
-            font-size: 12px;
-            margin-bottom: 2px;
-            color: #fff;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-weight: 600;
+            font-size: 12px; margin-bottom: 2px; color: #fff; width: 100%;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;
         }
-        .card-aluno .detalhes {
-            font-size: 10px;
-            color: var(--cor-neon, #38bdf8);
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-top: 2px;
-        }
-        .card-aluno .periodos-detalhe {
-            font-size: 10px;
-            margin-top: 4px;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            width: 100%;
-        }
+        .card-aluno .detalhes { font-size: 10px; color: var(--cor-neon, #38bdf8); margin-bottom: 4px; }
+        .status-badge { font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: bold; width: 100%; }
+        .status-ok { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
         .status-parcial { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4); }
-        .status-completo { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
 
         footer {
-            margin-top: 12px;
-            text-align: center;
-            font-size: 12px;
-            color: #64748b;
-            flex-shrink: 0;
-            letter-spacing: 0.5px;
-            font-weight: 500;
+            margin-top: 12px; text-align: center; font-size: 12px; color: #64748b;
+            flex-shrink: 0; letter-spacing: 0.5px; font-weight: 500;
         }
     </style>
 </head>
@@ -297,7 +188,7 @@
         }
 
         async function resetarPainel() {
-            if (confirm("Deseja realmente resetar o painel e apagar todas as chamadas atuais para iniciar uma nova demonstração?")) {
+            if (confirm("Deseja realmente resetar o painel e apagar todas as chamadas atuais?")) {
                 await fetch('/api/presenca', { method: 'DELETE' });
                 sincronizarPresencas();
             }
@@ -326,71 +217,57 @@
                             turma: turma,
                             disciplina: disciplina,
                             professor: aluno.professor || 'Douglas H. França',
-                            periodo: aluno.periodo || '1 Período',
+                            periodo: aluno.periodo || '2 Períodos',
                             data: aluno.data || '',
                             horario: aluno.horario || '',
                             alunos: []
                         };
                     }
                     blocosMap[chave].periodo = aluno.periodo || blocosMap[chave].periodo;
-                    blocosMap[chave].professor = aluno.professor || blocosMap[chave].professor;
-                    blocosMap[chave].data = aluno.data || blocosMap[chave].data;
-                    blocosMap[chave].horario = aluno.horario || blocosMap[chave].horario;
                     blocosMap[chave].alunos.push(aluno);
                 });
 
                 containerAulas.innerHTML = '';
-
                 let indiceCor = 0;
+
                 Object.keys(blocosMap).forEach(chave => {
                     const bloco = blocosMap[chave];
                     const corAtual = coresNeon[indiceCor % coresNeon.length];
                     indiceCor++;
 
-                    const unicosMap = new Map();
-                    bloco.alunos.forEach(item => {
-                        unicosMap.set(item.alunoId, item);
-                    });
-                    const todosAlunosDaAula = Array.from(unicosMap.values());
-                    
-                    const presentes = todosAlunosDaAula.filter(a => a.status === "PRESENTE");
-                    const faltantes = todosAlunosDaAula.filter(a => a.status === "FALTA");
+                    // Pega a lista oficial completa da turma para exibir todos os alunos
+                    const listaCompletaTurma = buscarListaTurmaWeb(bloco.turma, bloco.alunos);
 
                     const secao = document.createElement('div');
                     secao.className = 'secao-aula';
                     secao.style.setProperty('--cor-neon', corAtual);
 
                     let cardsHtml = '';
-                    todosAlunosDaAula.forEach(aluno => {
-                        const fotoAvatar = (aluno.avatarUrl && aluno.avatarUrl.trim() !== "") 
-                            ? aluno.avatarUrl 
-                            : gerarAvatarPadrao(aluno.nome);
+                    let totalPresentes = 0;
+                    let totalFaltas = 0;
 
-                        let badgeStatusHtml = '';
-                        if (aluno.status === "PRESENTE") {
-                            // Verifica se há discriminação de períodos (ex: veio só no 1º ou só no 2º)
-                            if (aluno.detalhePeriodos) {
-                                badgeStatusHtml = `<div class="periodos-detalhe status-parcial">⚠️ ${aluno.detalhePeriodos}</div>`;
-                            } else {
-                                badgeStatusHtml = `<div class="periodos-detalhe status-completo">✅ Presente (${bloco.periodo})</div>`;
-                            }
+                    listaCompletaTurma.forEach(alunoObj => {
+                        const fotoAvatar = gerarAvatarPadrao(alunoObj.nome);
+                        let badgeHtml = '';
+
+                        if (alunoObj.faltas && alunoObj.faltas.length > 0) {
+                            totalFaltas++;
+                            const periodosFalta = alunoObj.faltas.sort((a,b)=>a-b).map(p => `${p}º`).join(', ');
+                            badgeHtml = `<div class="status-badge status-parcial">⚠️ Falta no(s): ${periodosFalta}</div>`;
                         } else {
-                            badgeStatusHtml = `<div class="periodos-detalhe" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">❌ Falta Total</div>`;
+                            totalPresentes++;
+                            badgeHtml = `<div class="status-badge status-ok">✓ Presente Total</div>`;
                         }
 
                         cardsHtml += `
                             <div class="card-aluno">
-                                <img src="${fotoAvatar}" alt="${aluno.nome}" onerror="this.src='${gerarAvatarPadrao(aluno.nome)}'">
-                                <h4 title="${aluno.nome}">${aluno.nome}</h4>
+                                <img src="${fotoAvatar}" alt="${alunoObj.nome}">
+                                <h4 title="${alunoObj.nome}">${alunoObj.nome}</h4>
                                 <div class="detalhes">Turma ${bloco.turma}</div>
-                                ${badgeStatusHtml}
+                                ${badgeHtml}
                             </div>
                         `;
                     });
-
-                    if (todosAlunosDaAula.length === 0) {
-                        cardsHtml = '<p style="color: #64748b; font-size: 13px; grid-column: 1/-1;">Nenhum aluno registrado nesta chamada.</p>';
-                    }
 
                     secao.innerHTML = `
                         <div class="cabecalho-secao">
@@ -399,8 +276,8 @@
                                 <span style="font-size: 13px; color: #94a3b8; font-weight: normal; margin-left: 10px;">(Prof. ${bloco.professor})</span>
                             </h3>
                             <div class="badges-status">
-                                <span class="badge-presente">✅ ${presentes.length} Alunos com Presença</span>
-                                <span class="badge-falta">❌ ${faltantes.length} Faltas</span>
+                                <span class="badge-presente">✅ ${totalPresentes} Presentes</span>
+                                <span class="badge-falta">❌ ${totalFaltas} Alunos com Falta</span>
                             </div>
                             <div class="meta-aula">
                                 📅 ${bloco.data} &nbsp;|&nbsp; 🕒 ${bloco.horario} &nbsp;|&nbsp; ⏱️ ${bloco.periodo}
@@ -415,8 +292,33 @@
                 });
 
             } catch (erro) {
-                console.error("Erro ao sincronizar dados com o servidor:", erro);
+                console.error("Erro ao sincronizar dados:", erro);
             }
+        }
+
+        // Função auxiliar no painel para mesclar a lista oficial da turma com o status enviado pela API
+        function buscarListaTurmaWeb(turma, alunosEnviados) {
+            // Mapas de nomes oficiais por turma
+            const turmasOficiais = {
+                "61": ["Abigail Vandervoort de Cristo Palmeira", "Ana Clara Oliveira da Silva", "Ana Luiza Machado", "Andriel Alves Aguiar", "Angelo Massimo Luz Nardini", "Anita Valerio Roatti", "Bernardo de Souza Vigil", "Bianca Santos de Andrade Alves", "Bruno Lopes Assunção", "Camila Sophia Guzman Olivo", "Davi Flores Rodrigues", "Elena Araujo dos Santos", "Fernando Silveira Lemos", "Heitor Becker Souto", "Isabelly Zangalli de Sá", "Joao William do Amaral Torres", "Lucas Marquez Candeia", "Maria Clara Duczinski Goncalves", "Nicolas Ferreira Nunes", "Otavio Ribeiro de Araujo", "Pedro Cardillo Marques", "Pedro Henrique dos Santos Silveira", "Rafaella Pires da Silva", "Sophia da Silva Taborda", "Thalita Bello Bianchi", "Valentina Falcao de Sousa", "Victor Hugo Luz Nardini", "Vitor Henrique da Silva Taborda"],
+                "71": ["Anthony Felipe de Castro Guedes", "Ashley Maeski Pires", "Ayla Vitoria Duczinski Goncalves", "Diogo Lacerda Correa", "Eduarda Selli Lazzari", "Eduardo Dias da Silva", "Emilly Luiza Lopes dos Santos", "Felippe Marques Pereira", "Guilherme Trindade Fraga", "Isabella da Silva Moreira", "Julio e Silva Pereira", "Lavinia Dionizio Rodrigues", "Lucas Silveira Bittencourt", "Manuella Lapinski Mello", "Matheus Winter Aires", "Melissa de Oliveira de Azevedo", "Miguel da Silva Arruda", "Otavio Batista Deitos", "Pyetra Raupp de Oliveira", "Rafael da Silva Dias", "Ricelly Rossi Rossetti", "Saymon Schosller Garcia", "Vinicius Moura Silveira da Silva", "Vitor dos Santos Tomasi", "Yago da Silva Cavalheiro"],
+                "81": ["Alehandro de Souza Schwanz", "Alicia Porto de Borba", "Beatriz Machado de Fraga", "Camille Belo de Oliveira", "Fernando Duarte Pereira Junior", "Gabriel Ribeiro Flores", "Gustavo Pasqualeto de Borba", "Henry Alexandre Bressane de Oliveira", "Henrique Dias de Freitas", "Joao Lucca Almeida Paim", "Joao Miguel de Souza Escudeiro", "Joao Pedro da Silva Cardoso", "Maria Sophia Alves Dias", "Mariana Cunha Padilha", "Micael Vinicius de Oliveira Avelino", "Miguel Alyson dos Santos Ortiz", "Miguel Souza Menezes", "Milena dos Santos Rodrigues", "Nikolas Gabriel Silva da Rosa", "Saimon de Lima Lentz", "Sarah Maria Vieira Kampf", "Sofia dos Santos Campos", "Sofia Teresa do Amaral Torres", "Vitor Gabriel Siqueira Damaceno", "Yuri Godinho Garrafiel"],
+                "91": ["Agata Goncalves Dias dos Santos", "Alice Da Silva Vaz", "Arthur Becker Souto", "Cynara Mirella Porto Ramos", "Gabriel do Prado Jorge", "Henrique Cardoso Lessa", "Isabelle Correa dos Santos", "Isabelle Krystine Almeida Gonçalves", "Izadora Pinto do Prado", "João Pedro Americo Cruz da Silva", "Leonardo de Souza Vigil", "Livia Fernandes Araujo", "Lucas Antonio Soares Bulsing", "Lucas Vargas Kittelmann", "Luiza Natally Ramos", "Luiza Trindade Fraga", "Maria Eduarda Kaminski Lenz", "Mariana Cavalheiro Araujo", "Nicollas Sheffer da Chagas", "Rafaela Gabrielly Cordeiro da Silva", "Sérgio Manoel Espindola da Rosa", "Sofia Balbinot Zanchin.", "NOME_DO_ALUNO_23", "Valentina Vidal Soares", "Vitória de Vargas Paiva de Oliveira", "Yuri Kaminski Leopold"],
+                "101": ["Alice Gonçalves Dias dos Santos", "Amanda da Mota Campos", "Andreo da Silva Roque", "Brayan Ferreira dos Santos Fraga", "Eduarda Ferreira Oliveira", "Felipe Amorim Bitencourt", "Leonardo dos Santos Fernandes Voltz", "Marcelo Antonio Thielen Archanjo do Nascimento", "Pedro Felipe de Oliveira Avelino"],
+                "201": ["Ariel Monteiro de Souza", "Camile Elias de Brito", "Camili Cruz Benites", "Franciely Araujo Machado", "Gabriel Waiss Krziminski", "Maria Carolynna de Souza Vigil", "Nicoli Rossa Dias", "Rayan de Souza"],
+                "301": ["Ana Luiza Amorim Bitencourt", "Eduarda Machado D'Ávila", "Evellyn dos Santos Tomasi", "Gabriely Pinto do Prado", "Ian Kaminski Leopoldo", "Isabele Acosta de Moura", "Kassiano Augusto Fialho Farias", "Maria Eduarda Ramos Gomes", "Nicolle Vieira Nunes", "Vitoria Fermiano do Nascimento"]
+            };
+
+            const nomesLista = turmasOficiais[turma] || alunosEnviados.map(a => a.nome);
+            const mapaEnviados = new Map();
+            alunosEnviados.forEach(a => mapaEnviados.set(a.nome, a.faltas || []));
+
+            return nomesLista.map(nome => {
+                return {
+                    nome: nome,
+                    faltas: mapaEnviados.get(nome) || []
+                };
+            });
         }
 
         setInterval(sincronizarPresencas, 2000);
