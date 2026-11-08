@@ -14,13 +14,11 @@ export default function handler(req, res) {
     return;
   }
 
-  // GET: Retorna os alunos presentes e metadados da aula atual
   if (req.method === 'GET') {
     res.status(200).json(listaPresencas);
     return;
   }
 
-  // POST: Adiciona ou atualiza o aluno na lista da aula
   if (req.method === 'POST') {
     const { alunoId, nome, turma, avatarUrl, disciplina, periodo } = req.body;
 
@@ -31,16 +29,17 @@ export default function handler(req, res) {
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     const horarioAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    // Evita duplicidade do mesmo aluno na mesma turma/sessão
-    const indexExistente = listaPresencas.findIndex(p => p.alunoId === alunoId && p.turma === turma);
+    // Chave única combinando Aluno, Turma e Disciplina para separar as aulas
+    const chaveUnica = `${alunoId}-${turma}-${disciplina}`;
+    const indexExistente = listaPresencas.findIndex(p => `${p.alunoId}-${p.turma}-${p.disciplina}` === chaveUnica);
 
     const novoRegistro = {
       alunoId: alunoId || Date.now().toString(),
       nome,
       turma,
       avatarUrl: avatarUrl || '',
-      disciplina: disciplina || 'Artes / Cultura Digital',
-      periodo: periodo || '1º e 2º Período',
+      disciplina: disciplina || 'Artes',
+      periodo: periodo || '1º Período',
       data: dataAtual,
       horario: horarioAtual
     };
@@ -51,14 +50,19 @@ export default function handler(req, res) {
       listaPresencas.push(novoRegistro);
     }
 
-    res.status(200).json({ mensagem: 'Presença atualizada com sucesso!', registro: novoRegistro });
+    res.status(200).json({ mensagem: 'Presença atualizada!', registro: novoRegistro });
     return;
   }
 
-  // DELETE: Limpa a lista (caso queira reiniciar a chamada do dia)
+  // DELETE para remover um aluno específico ou limpar tudo
   if (req.method === 'DELETE') {
+    const { alunoId, turma, disciplina } = req.query;
+    if (alunoId && turma && disciplina) {
+      listaPresencas = listaPresencas.filter(p => !(p.alunoId === alunoId && p.turma === turma && p.disciplina === disciplina));
+      return res.status(200).json({ mensagem: 'Aluno removido da presença.' });
+    }
     listaPresencas = [];
-    res.status(200).json({ mensagem: 'Painel limpo com sucesso!' });
+    res.status(200).json({ mensagem: 'Painel limpo!' });
     return;
   }
 
