@@ -21,7 +21,7 @@
             border-radius: 16px;
             padding: 16px 25px;
             display: grid;
-            grid-template-columns: 280px 1fr 320px;
+            grid-template-columns: 280px 1fr 340px;
             align-items: center;
             box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
             flex-shrink: 0;
@@ -73,9 +73,14 @@
         .lista-alunos-topo {
             font-size: 11px;
             color: #e2e8f0;
-            line-height: 1.5;
+            line-height: 1.4;
+            max-height: 60px;
+            overflow-y: auto;
+            padding-right: 4px;
             word-break: break-word;
         }
+        .lista-alunos-topo::-webkit-scrollbar { width: 4px; }
+        .lista-alunos-topo::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.5); border-radius: 4px; }
 
         .painel-container {
             background: #0f172a;
@@ -252,7 +257,7 @@
         <div class="bloco-eletiva">
             <strong>Eletiva Turma 91: PresenSys FCID</strong>
             <div class="lista-alunos-topo" id="lista-alunos-participantes">
-                Alunos: [ Inserir nomes no código ]
+                Alunos: [ Carregando lista... ]
             </div>
         </div>
     </header>
@@ -271,8 +276,15 @@
     </footer>
 
     <script>
-        // Lista completa incluindo o Gabriel do Prado
-        const alunosDaEletiva = ["Gabriel do Prado", "Henrique Cardoso", "João Americo", "Leonardo de Souza", "Lucas Antonio", "Luiza Trindade", "Mariana Cavalheiro", "Rafaela da Silva", "Sergio Manoel", "Valentina Vidal", "Isabelle Correa"];
+        // Lista oficial e completa de alunos da Turma 91 para a Eletiva
+        const alunosDaEletiva = [
+            "Ágata Gonçalves", "Alice Vaz", "Arthur Becker", "Cynara Mirella", 
+            "Gabriel do Prado", "Henrique Cardoso", "Isabelle Correa", "Isabelle Krystine", 
+            "Izadora Pinto", "João Pedro Americo", "Leonardo de Souza", "Livia Fernandes", 
+            "Lucas Antonio", "Lucas Vargas", "Luiza Natally", "Luiza Trindade", 
+            "Maria Eduarda", "Mariana Cavalheiro", "Nicollas Sheffer", "Rafaela Gabrielly", 
+            "Sérgio Manoel", "Sofia Balbinot", "Valentina Vidal", "Vitória de Vargas", "Yuri Kaminski"
+        ];
         document.getElementById('lista-alunos-participantes').textContent = alunosDaEletiva.join(" • ");
 
         const coresNeon = ['#38bdf8', '#4ade80', '#facc15', '#f472b6', '#a78bfa', '#38ef7d'];
