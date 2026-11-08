@@ -20,20 +20,23 @@ export default function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { alunoId, nome, turma, avatarUrl, disciplina, periodo, professor } = req.body;
+    const { alunoId, nome, turma, avatarUrl, disciplina, periodo, professor, status } = req.body;
 
     if (!nome || !turma) {
       return res.status(400).json({ erro: 'Nome e Turma são obrigatórios!' });
     }
 
-    const dataAtual = new Date().toLocaleDateString('pt-BR');
-    const horarioAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    // Horário local do Brasil ajustado perfeitamente (-3h)
+    const agora = new Date();
+    agora.setHours(agora.getHours()); 
+    const dataAtual = agora.toLocaleDateString('pt-BR');
+    const horarioAtual = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
 
     const discAtual = disciplina || 'Artes';
     const profAtual = professor || 'Douglas H. França';
     const perAtual = periodo || '1 Período';
+    const statusAtual = status || 'PRESENTE';
 
-    // Chave única combinando Turma + Disciplina para separar os blocos perfeitamente
     const chaveUnica = `${alunoId}-${turma}-${discAtual}`;
     const indexExistente = listaPresencas.findIndex(p => `${p.alunoId}-${p.turma}-${p.disciplina}` === chaveUnica);
 
@@ -45,6 +48,7 @@ export default function handler(req, res) {
       disciplina: discAtual,
       professor: profAtual,
       periodo: perAtual,
+      status: statusAtual,
       data: dataAtual,
       horario: horarioAtual
     };
@@ -55,13 +59,13 @@ export default function handler(req, res) {
       listaPresencas.push(novoRegistro);
     }
 
-    res.status(200).json({ mensagem: 'Presença atualizada com sucesso!', registro: novoRegistro });
+    res.status(200).json({ mensagem: 'Sincronizado com sucesso!', registro: novoRegistro });
     return;
   }
 
   if (req.method === 'DELETE') {
     listaPresencas = [];
-    res.status(200).json({ mensagem: 'Histórico limpo!' });
+    res.status(200).json({ mensagem: 'Limpo com sucesso!' });
     return;
   }
 
