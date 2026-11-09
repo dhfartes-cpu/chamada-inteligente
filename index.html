@@ -312,11 +312,17 @@
             alunosEnviados.forEach(a => {
                 let faltasDoAluno = a.faltas || [];
                 
+                // Se o array de faltas veio vazio ou com tamanho 0, mas o status é FALTA
                 if (faltasDoAluno.length === 0 && (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta")))) {
-                    const numerosEncontrados = a.periodo.match(/\d+/g);
-                    if (numerosEncontrados) {
-                        faltasDoAluno = numerosEncontrados.map(Number);
-                    } else {
+                    if (a.periodo) {
+                        // Extrai TODOS os números contidos na string do período (ex: "Falta no(s): 1º, 2º" vira [1, 2])
+                        const numerosEncontrados = a.periodo.match(/\d+/g);
+                        if (numerosEncontrados) {
+                            // Converte todos para números inteiros e remove duplicados caso haja
+                            faltasDoAluno = [...new Set(numerosEncontrados.map(Number))];
+                        }
+                    }
+                    if (faltasDoAluno.length === 0) {
                         faltasDoAluno = [1];
                     }
                 }
