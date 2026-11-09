@@ -310,22 +310,31 @@
             const mapaEnviados = new Map();
             
             alunosEnviados.forEach(a => {
-                let faltasDoAluno = a.faltas || [];
+                let faltasDoAluno = [];
                 
-                // Se o array de faltas veio vazio ou com tamanho 0, mas o status é FALTA
-                if (faltasDoAluno.length === 0 && (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta")))) {
-                    if (a.periodo) {
-                        // Extrai TODOS os números contidos na string do período (ex: "Falta no(s): 1º, 2º" vira [1, 2])
-                        const numerosEncontrados = a.periodo.match(/\d+/g);
+                // Prioriza ler o array direto se o app o enviou preenchido
+                if (Array.isArray(a.faltas) && a.faltas.length > 0) {
+                    faltasDoAluno = a.faltas;
+                } 
+                // Se não veio array mas o status é FALTA ou o texto do período traz detalhes da falta individual
+                else if (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta"))) {
+                    if (a.periodo && a.periodo.includes("no(s):")) {
+                        const parteNumeros = a.periodo.split("no(s):")[1];
+                        const numerosEncontrados = parteNumeros.match(/\d+/g);
                         if (numerosEncontrados) {
-                            // Converte todos para números inteiros e remove duplicados caso haja
                             faltasDoAluno = [...new Set(numerosEncontrados.map(Number))];
                         }
                     }
                     if (faltasDoAluno.length === 0) {
-                        faltasDoAluno = [1];
+                        const numerosEncontrados = a.periodo.match(/\d+/g);
+                        if (numerosEncontrados) {
+                            faltasDoAluno = [...new Set(numerosEncontrados.map(Number))];
+                        } else {
+                            faltasDoAluno = [1];
+                        }
                     }
                 }
+                
                 mapaEnviados.set(a.nome, faltasDoAluno);
             });
 
