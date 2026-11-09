@@ -197,7 +197,7 @@
         async function sincronizarPresencas() {
             try {
                 const resposta = await fetch('/api/presenca');
-                const dados = await resposta.json();
+                let dados = await resposta.json();
                 
                 const containerAulas = document.getElementById('container-aulas');
 
@@ -205,6 +205,14 @@
                     containerAulas.innerHTML = '<p style="color: #64748b; text-align: center; margin-top: 60px; font-size: 15px;">Nenhuma chamada registrada no momento.</p>';
                     return;
                 }
+
+                // Mantém apenas o último envio de cada aluno para evitar lixo acumulado
+                const mapUltimosRegistros = new Map();
+                dados.forEach(aluno => {
+                    const chaveUnica = `${aluno.turma || 'Geral'}-${aluno.nome}`;
+                    mapUltimosRegistros.set(chaveUnica, aluno);
+                });
+                dados = Array.from(mapUltimosRegistros.values());
 
                 const blocosMap = {};
                 dados.forEach(aluno => {
@@ -312,27 +320,29 @@
             alunosEnviados.forEach(a => {
                 let faltasDoAluno = [];
                 
-                // Prioriza ler o array direto se o app o enviou preenchido
+                // 1. Se o app enviou o array limpo, usa ele diretamente
                 if (Array.isArray(a.faltas) && a.faltas.length > 0) {
                     faltasDoAluno = a.faltas;
                 } 
-                // Se não veio array mas o status é FALTA ou o texto do período traz detalhes da falta individual
+                // 2. Se o aluno marcou falta, verifica o texto do período com cautela
                 else if (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta"))) {
-                    if (a.periodo && a.periodo.includes("no(s):")) {
-                        const parteNumeros = a.periodo.split("no(s):")[1];
-                        const numerosEncontrados = parteNumeros.match(/\d+/g);
+                    // CORREÇÃO: Só extrai os números se a string contiver explicitamente a palavra "Falta" ou "no(s):",
+                    // ignorando textos genéricos da aula inteira como "4 Períodos".
+                    if (a.periodo && (a.periodo.includes("no(s):") || a.periodo.includes("Falta"))) {
+                        const partes = a.periodo.split(/no\(s\):|Falta/i);
+                        const textoAlvo = partes[1] || a.periodo;
+                        const numerosEncontrados = textoAlvo.match(/\d+/g);
                         if (numerosEncontrados) {
                             faltasDoAluno = [...new Set(numerosEncontrados.map(Number))];
                         }
                     }
+                    
+                    // Se mesmo assim não achou períodos específicos mas é falta, assume o 1º por segurança
                     if (faltasDoAluno.length === 0) {
-                        const numerosEncontrados = a.periodo.match(/\d+/g);
-                        if (numerosEncontrados) {
-                            faltasDoAluno = [...new Set(numerosEncontrados.map(Number))];
-                        } else {
-                            faltasDoAluno = [1];
-                        }
+                        faltasDoAluno = [1];
                     }
+                } else {
+                    faltasDoAluno = [];
                 }
                 
                 mapaEnviados.set(a.nome, faltasDoAluno);
