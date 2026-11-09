@@ -206,10 +206,11 @@
                     return;
                 }
 
-                // Mantém apenas o registro mais recente enviado para cada aluno
+                // Mantém apenas o registro mais recente enviado para cada aluno por turma
                 const mapUltimosRegistros = new Map();
                 dados.forEach(aluno => {
-                    const chaveUnica = `${aluno.turma || 'Geral'}-${aluno.nome ? aluno.nome.trim().toLowerCase() : ''}`;
+                    const nomeNormalizado = aluno.nome ? aluno.nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : '';
+                    const chaveUnica = `${aluno.turma || 'Geral'}-${nomeNormalizado}`;
                     mapUltimosRegistros.set(chaveUnica, aluno);
                 });
                 dados = Array.from(mapUltimosRegistros.values());
@@ -320,33 +321,36 @@
             alunosEnviados.forEach(a => {
                 let faltasDoAluno = [];
                 
-                // BLINDAGEM ROBUSTA: Trata array, string ou status de texto enviado pelo app
-                if (Array.isArray(a.faltas)) {
-                    faltasDoAluno = a.faltas.map(Number);
-                } else if (typeof a.faltas === 'string') {
-                    const matches = a.faltas.match(/\d+/g);
-                    if (matches) faltasDoAluno = matches.map(Number);
-                } else if (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta"))) {
-                    if (a.periodo && a.periodo.includes("no(s):")) {
-                        const parteNumeros = a.periodo.split("no(s):")[1];
-                        const numerosEncontrados = parteNumeros.match(/\d+/g);
-                        if (numerosEncontrados) {
-                            faltasDoAluno = [...new Set(numerosEncontrados.map(Number))].filter(n => n >= 1 && n <= 6);
-                        }
+                // Extração blindada de todos os dígitos numéricos independentemente do formato recebido
+                if (a.faltas) {
+                    if (Array.isArray(a.faltas)) {
+                        faltasDoAluno = a.faltas.flatMap(v => String(v).split('')).map(Number);
+                    } else {
+                        const digitos = String(a.faltas).match(/\d/g);
+                        if (digitos) faltasDoAluno = digitos.map(Number);
                     }
-                    if (faltasDoAluno.length === 0) faltasDoAluno = [1];
+                } else if (a.periodo && a.periodo.includes("Falta")) {
+                    const digitos = String(a.periodo).match(/\d/g);
+                    if (digitos) faltasDoAluno = digitos.map(Number);
+                } else if (a.status === "FALTA") {
+                    faltasDoAluno = [1];
                 }
+
+                // Filtra apenas períodos válidos de aula (1 a 6) e remove duplicados
+                faltasDoAluno = [...new Set(faltasDoAluno)].filter(n => n >= 1 && n <= 6);
                 
                 if (a.nome) {
-                    mapaEnviados.set(a.nome.trim().toLowerCase(), faltasDoAluno);
+                    // Normalização de nome para ignorar diferenças de acentuação e maiúsculas/minúsculas
+                    const nomeChave = a.nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    mapaEnviados.set(nomeChave, faltasDoAluno);
                 }
             });
 
             return nomesLista.map(nome => {
-                const chaveBusca = nome.trim().toLowerCase();
+                const nomeChave = nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                 return {
                     nome: nome,
-                    faltas: mapaEnviados.get(chaveBusca) || []
+                    faltas: mapaEnviados.get(nomeChave) || []
                 };
             });
         }
