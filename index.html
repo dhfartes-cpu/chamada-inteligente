@@ -209,7 +209,7 @@
                 // Mantém apenas o registro mais recente enviado para cada aluno
                 const mapUltimosRegistros = new Map();
                 dados.forEach(aluno => {
-                    const chaveUnica = `${aluno.turma || 'Geral'}-${aluno.nome}`;
+                    const chaveUnica = `${aluno.turma || 'Geral'}-${aluno.nome ? aluno.nome.trim().toLowerCase() : ''}`;
                     mapUltimosRegistros.set(chaveUnica, aluno);
                 });
                 dados = Array.from(mapUltimosRegistros.values());
@@ -259,7 +259,7 @@
 
                         if (alunoObj.faltas && alunoObj.faltas.length > 0) {
                             totalFaltas++;
-                            const periodosFalta = alunoObj.faltas.sort((a,b)=>a-b).map(p => `${p}º`).join(', ');
+                            const periodosFalta = [...new Set(alunoObj.faltas)].sort((a,b)=>a-b).map(p => `${p}º`).join(', ');
                             badgeHtml = `<div class="status-badge status-parcial">⚠️ Falta no(s): ${periodosFalta}</div>`;
                         } else {
                             totalPresentes++;
@@ -320,36 +320,33 @@
             alunosEnviados.forEach(a => {
                 let faltasDoAluno = [];
                 
-                // 1. Prioridade absoluta para o array numérico exato enviado pelo app (ex: [1, 2])
-                if (Array.isArray(a.faltas) && a.faltas.length > 0) {
-                    faltasDoAluno = a.faltas;
-                } 
-                // 2. Se o app enviou em formato de texto individualizado por aluno (ex: "Falta no(s): 1, 2")
-                else if (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta"))) {
+                // BLINDAGEM ROBUSTA: Trata array, string ou status de texto enviado pelo app
+                if (Array.isArray(a.faltas)) {
+                    faltasDoAluno = a.faltas.map(Number);
+                } else if (typeof a.faltas === 'string') {
+                    const matches = a.faltas.match(/\d+/g);
+                    if (matches) faltasDoAluno = matches.map(Number);
+                } else if (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta"))) {
                     if (a.periodo && a.periodo.includes("no(s):")) {
                         const parteNumeros = a.periodo.split("no(s):")[1];
                         const numerosEncontrados = parteNumeros.match(/\d+/g);
                         if (numerosEncontrados) {
-                            // Filtra para aceitar apenas períodos válidos de aula (geralmente de 1 a 6)
                             faltasDoAluno = [...new Set(numerosEncontrados.map(Number))].filter(n => n >= 1 && n <= 6);
                         }
                     }
-                    
-                    // Se mesmo assim veio marcado como falta mas sem o detalhe numérico, assume o 1º período
-                    if (faltasDoAluno.length === 0) {
-                        faltasDoAluno = [1];
-                    }
-                } else {
-                    faltasDoAluno = [];
+                    if (faltasDoAluno.length === 0) faltasDoAluno = [1];
                 }
                 
-                mapaEnviados.set(a.nome, faltasDoAluno);
+                if (a.nome) {
+                    mapaEnviados.set(a.nome.trim().toLowerCase(), faltasDoAluno);
+                }
             });
 
             return nomesLista.map(nome => {
+                const chaveBusca = nome.trim().toLowerCase();
                 return {
                     nome: nome,
-                    faltas: mapaEnviados.get(nome) || []
+                    faltas: mapaEnviados.get(chaveBusca) || []
                 };
             });
         }
