@@ -20,7 +20,8 @@ export default function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { alunoId, nome, turma, avatarUrl, disciplina, periodo, professor, status } = req.body;
+    // CORREÇÃO: Adicionamos o 'faltas' aqui para ele não ser ignorado!
+    const { alunoId, nome, turma, avatarUrl, disciplina, periodo, professor, status, faltas } = req.body;
 
     if (!nome || !turma) {
       return res.status(400).json({ erro: 'Nome e Turma são obrigatórios!' });
@@ -34,10 +35,11 @@ export default function handler(req, res) {
     const profAtual = professor || 'Douglas H. França';
     const perAtual = periodo || '1 Período';
     const statusAtual = status || 'PRESENTE';
+    
+    // CORREÇÃO: Garante que o campo faltas seja sempre um array válido (ex: [1, 2])
+    const faltasAtual = Array.isArray(faltas) ? faltas : [];
 
     // REGRA DE SOBREPOSIÇÃO POR TURMA:
-    // Se a chamada enviada for para uma turma que já existe com OUTRA disciplina,
-    // limpamos a chamada antiga dessa turma para ficar APENAS a aula atual.
     const chamadaExistenteDaTurma = listaPresencas.find(p => p.turma === turma);
     if (chamadaExistenteDaTurma && chamadaExistenteDaTurma.disciplina !== discAtual) {
       listaPresencas = listaPresencas.filter(p => p.turma !== turma);
@@ -55,6 +57,7 @@ export default function handler(req, res) {
       professor: profAtual,
       periodo: perAtual,
       status: statusAtual,
+      faltas: faltasAtual, // CORREÇÃO: Salva o array de faltas aqui
       data: dataAtual,
       horario: horarioAtual
     };
