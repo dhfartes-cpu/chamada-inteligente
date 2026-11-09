@@ -311,7 +311,15 @@
 
             const nomesLista = turmasOficiais[turma] || alunosEnviados.map(a => a.nome);
             const mapaEnviados = new Map();
-            alunosEnviados.forEach(a => mapaEnviados.set(a.nome, a.faltas || []));
+            
+            alunosEnviados.forEach(a => {
+                let faltasDoAluno = a.faltas || [];
+                // Compatibilidade automática caso venha marcado como FALTA ou no texto do período
+                if (faltasDoAluno.length === 0 && (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta")))) {
+                    faltasDoAluno = [1]; 
+                }
+                mapaEnviados.set(a.nome, faltasDoAluno);
+            });
 
             return nomesLista.map(nome => {
                 return {
