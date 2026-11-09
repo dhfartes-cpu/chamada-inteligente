@@ -206,14 +206,42 @@
                     return;
                 }
 
-                // Mantém apenas o registro mais recente enviado para cada aluno por turma
-                const mapUltimosRegistros = new Map();
+                // FUSÃO DE REGISTROS: Agrupa e junta todas as faltas enviadas pelo app para o mesmo aluno
+                const mapConsolidado = new Map();
+                
                 dados.forEach(aluno => {
-                    const nomeNormalizado = aluno.nome ? aluno.nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : '';
+                    if (!aluno.nome) return;
+                    const nomeNormalizado = aluno.nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     const chaveUnica = `${aluno.turma || 'Geral'}-${nomeNormalizado}`;
-                    mapUltimosRegistros.set(chaveUnica, aluno);
+
+                    // Extrai os números de falta deste objeto
+                    let faltasItem = [];
+                    if (aluno.faltas) {
+                        if (Array.isArray(aluno.faltas)) {
+                            faltasItem = aluno.faltas.flatMap(v => String(v).split('')).map(Number);
+                        } else {
+                            const digitos = String(aluno.faltas).match(/\d/g);
+                            if (digitos) faltasItem = digitos.map(Number);
+                        }
+                    } else if (aluno.periodo && aluno.periodo.includes("Falta")) {
+                        const digitos = String(aluno.periodo).match(/\d/g);
+                        if (digitos) faltasItem = digitos.map(Number);
+                    } else if (aluno.status === "FALTA") {
+                        faltasItem = [1];
+                    }
+
+                    if (mapConsolidado.has(chaveUnica)) {
+                        // Se já tem registro desse aluno, combina as faltas (ex: [1] + [2] = [1, 2])
+                        const regExistente = mapConsolidado.get(chaveUnica);
+                        const combinadas = [...new Set([...regExistente.faltas, ...faltasItem])];
+                        regExistente.faltas = combinadas;
+                    } else {
+                        aluno.faltas = [...new Set(faltasItem)];
+                        mapConsolidado.set(chaveUnica, aluno);
+                    }
                 });
-                dados = Array.from(mapUltimosRegistros.values());
+
+                dados = Array.from(mapConsolidado.values());
 
                 const blocosMap = {};
                 dados.forEach(aluno => {
@@ -232,7 +260,6 @@
                             alunos: []
                         };
                     }
-                    blocosMap[chave].periodo = aluno.periodo || blocosMap[chave].periodo;
                     blocosMap[chave].alunos.push(aluno);
                 });
 
@@ -319,30 +346,9 @@
             const mapaEnviados = new Map();
             
             alunosEnviados.forEach(a => {
-                let faltasDoAluno = [];
-                
-                // Extração blindada de todos os dígitos numéricos independentemente do formato recebido
-                if (a.faltas) {
-                    if (Array.isArray(a.faltas)) {
-                        faltasDoAluno = a.faltas.flatMap(v => String(v).split('')).map(Number);
-                    } else {
-                        const digitos = String(a.faltas).match(/\d/g);
-                        if (digitos) faltasDoAluno = digitos.map(Number);
-                    }
-                } else if (a.periodo && a.periodo.includes("Falta")) {
-                    const digitos = String(a.periodo).match(/\d/g);
-                    if (digitos) faltasDoAluno = digitos.map(Number);
-                } else if (a.status === "FALTA") {
-                    faltasDoAluno = [1];
-                }
-
-                // Filtra apenas períodos válidos de aula (1 a 6) e remove duplicados
-                faltasDoAluno = [...new Set(faltasDoAluno)].filter(n => n >= 1 && n <= 6);
-                
                 if (a.nome) {
-                    // Normalização de nome para ignorar diferenças de acentuação e maiúsculas/minúsculas
                     const nomeChave = a.nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                    mapaEnviados.set(nomeChave, faltasDoAluno);
+                    mapaEnviados.set(nomeChave, a.faltas || []);
                 }
             });
 
