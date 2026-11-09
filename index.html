@@ -320,28 +320,26 @@
             alunosEnviados.forEach(a => {
                 let faltasDoAluno = [];
                 
-                // Se o app enviou a lista de faltas certinha em array, usa ela
+                // 1. Prioridade absoluta para o array numérico exato enviado pelo app (ex: [1, 2])
                 if (Array.isArray(a.faltas) && a.faltas.length > 0) {
                     faltasDoAluno = a.faltas;
                 } 
-                // Se o status for FALTA, verifica estritamente se há números específicos informados
-                else if (a.status === "FALTA") {
-                    if (a.periodo && (a.periodo.includes("no(s):") || a.periodo.includes("Falta"))) {
-                        const partes = a.periodo.split(/no\(s\):|Falta/i);
-                        const textoAlvo = partes[1] || a.periodo;
-                        const numerosEncontrados = textoAlvo.match(/\d+/g);
+                // 2. Se o app enviou em formato de texto individualizado por aluno (ex: "Falta no(s): 1, 2")
+                else if (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta"))) {
+                    if (a.periodo && a.periodo.includes("no(s):")) {
+                        const parteNumeros = a.periodo.split("no(s):")[1];
+                        const numerosEncontrados = parteNumeros.match(/\d+/g);
                         if (numerosEncontrados) {
-                            // Filtra para pegar apenas números menores ou iguais a 6 (evita capturar o total de períodos tipo "4 Períodos")
-                            faltasDoAluno = [...new Set(numerosEncontrados.map(Number))].filter(n => n <= 6);
+                            // Filtra para aceitar apenas períodos válidos de aula (geralmente de 1 a 6)
+                            faltasDoAluno = [...new Set(numerosEncontrados.map(Number))].filter(n => n >= 1 && n <= 6);
                         }
                     }
                     
-                    // Se veio marcado como falta mas sem especificar o período, assume o 1º por segurança
+                    // Se mesmo assim veio marcado como falta mas sem o detalhe numérico, assume o 1º período
                     if (faltasDoAluno.length === 0) {
                         faltasDoAluno = [1];
                     }
                 } else {
-                    // Se estiver presente, zera as faltas
                     faltasDoAluno = [];
                 }
                 
