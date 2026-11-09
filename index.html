@@ -235,7 +235,6 @@
                     const corAtual = coresNeon[indiceCor % coresNeon.length];
                     indiceCor++;
 
-                    // Pega a lista oficial completa da turma para exibir todos os alunos
                     const listaCompletaTurma = buscarListaTurmaWeb(bloco.turma, bloco.alunos);
 
                     const secao = document.createElement('div');
@@ -296,9 +295,7 @@
             }
         }
 
-        // Função auxiliar no painel para mesclar a lista oficial da turma com o status enviado pela API
         function buscarListaTurmaWeb(turma, alunosEnviados) {
-            // Mapas de nomes oficiais por turma
             const turmasOficiais = {
                 "61": ["Abigail Vandervoort de Cristo Palmeira", "Ana Clara Oliveira da Silva", "Ana Luiza Machado", "Andriel Alves Aguiar", "Angelo Massimo Luz Nardini", "Anita Valerio Roatti", "Bernardo de Souza Vigil", "Bianca Santos de Andrade Alves", "Bruno Lopes Assunção", "Camila Sophia Guzman Olivo", "Davi Flores Rodrigues", "Elena Araujo dos Santos", "Fernando Silveira Lemos", "Heitor Becker Souto", "Isabelly Zangalli de Sá", "Joao William do Amaral Torres", "Lucas Marquez Candeia", "Maria Clara Duczinski Goncalves", "Nicolas Ferreira Nunes", "Otavio Ribeiro de Araujo", "Pedro Cardillo Marques", "Pedro Henrique dos Santos Silveira", "Rafaella Pires da Silva", "Sophia da Silva Taborda", "Thalita Bello Bianchi", "Valentina Falcao de Sousa", "Victor Hugo Luz Nardini", "Vitor Henrique da Silva Taborda"],
                 "71": ["Anthony Felipe de Castro Guedes", "Ashley Maeski Pires", "Ayla Vitoria Duczinski Goncalves", "Diogo Lacerda Correa", "Eduarda Selli Lazzari", "Eduardo Dias da Silva", "Emilly Luiza Lopes dos Santos", "Felippe Marques Pereira", "Guilherme Trindade Fraga", "Isabella da Silva Moreira", "Julio e Silva Pereira", "Lavinia Dionizio Rodrigues", "Lucas Silveira Bittencourt", "Manuella Lapinski Mello", "Matheus Winter Aires", "Melissa de Oliveira de Azevedo", "Miguel da Silva Arruda", "Otavio Batista Deitos", "Pyetra Raupp de Oliveira", "Rafael da Silva Dias", "Ricelly Rossi Rossetti", "Saymon Schosller Garcia", "Vinicius Moura Silveira da Silva", "Vitor dos Santos Tomasi", "Yago da Silva Cavalheiro"],
@@ -314,9 +311,14 @@
             
             alunosEnviados.forEach(a => {
                 let faltasDoAluno = a.faltas || [];
-                // Compatibilidade automática caso venha marcado como FALTA ou no texto do período
+                
                 if (faltasDoAluno.length === 0 && (a.status === "FALTA" || (a.periodo && a.periodo.includes("Falta")))) {
-                    faltasDoAluno = [1]; 
+                    const numerosEncontrados = a.periodo.match(/\d+/g);
+                    if (numerosEncontrados) {
+                        faltasDoAluno = numerosEncontrados.map(Number);
+                    } else {
+                        faltasDoAluno = [1];
+                    }
                 }
                 mapaEnviados.set(a.nome, faltasDoAluno);
             });
